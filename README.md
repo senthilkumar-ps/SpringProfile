@@ -14,29 +14,7 @@ So in this case we need configuration profiling.
 Prepare application.properties:
 -------------------------------
 Here is sample with 2 profile, dev and prod under src/main/resorces
-
-Config pom.xml
---------------
-Next we will add profile configuration in pom.xml
-
-<profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <activatedProperties>dev</activatedProperties>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <activatedProperties>prod</activatedProperties>
-            </properties>
-        </profile>
-    </profiles>\
-    
+   
 Maven compile & run App Locally (Eclipse):
 ------------------------------------------
 mvn clean package -P dev
@@ -51,28 +29,22 @@ Deploy App in Docker And Kubernetes:
 ------------------------------------
 1. Create Docker iamge
     
-        sudo docker build -t springprofile-dev .
-        sudo docker build -t springprofile-prod .
-      
-        ** While generating docker file need to change some configuration and those steps given in DockerFile
-      
+        sudo docker build -t springprofile .      
+              
 2. Run Docker Image Locally:      
 
         ** Docker Command:
         
-        docker run -d -p 8081:8081 -e "SPRING_PROFILES_ACTIVE=dev" --name spr-dev springprofile-dev :latest
-        docker run -d -p 8082:8082 -e "SPRING_PROFILES_ACTIVE=prod" --name spr-prod springprofile-prod :latest
+        docker run -d -p 8081:8081 -e "SPRING_PROFILES_ACTIVE=dev" --name spr-dev springprofile :latest
+        docker run -d -p 8082:8082 -e "SPRING_PROFILES_ACTIVE=prod" --name spr-prod springprofile :latest
         
 3. Push Image to DockerHUb
 
         ** Docker Command:
         
-        sudo docker tag springprofile psmsenthilkumar/springprofile-dev
-        sudo docker push psmsenthilkumar/springprofile-dev
-        
-        sudo docker tag springprofile psmsenthilkumar/springprofile-prod
-        sudo docker push psmsenthilkumar/springprofile-prod
-        
+        sudo docker tag springprofile psmsenthilkumar/springprofile:latest
+        sudo docker push psmsenthilkumar/springprofile:latest
+               
 4. Deploy App in Kubernetes Cluster
 
         kubectl create -f SpringProfile_k8s_dev.yaml
